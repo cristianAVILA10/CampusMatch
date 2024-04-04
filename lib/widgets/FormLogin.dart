@@ -1,3 +1,4 @@
+import 'package:campusmatch/screens/HomePage.dart';
 import 'package:campusmatch/screens/Recuperacion.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _FormLoginState extends State<FormLogin> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                //
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
               },
               style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
