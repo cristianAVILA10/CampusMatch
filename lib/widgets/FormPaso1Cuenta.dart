@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:campusmatch/screens/Paso2Cuenta.dart';
 
 class FormPaso1Cuenta extends StatelessWidget {
   const FormPaso1Cuenta({Key? key}) : super(key: key);
@@ -14,7 +15,8 @@ class FormPaso1Cuenta extends StatelessWidget {
           SizedBox(height: 20),
           Text(
             'Subir foto de perfil',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           SizedBox(height: 10),
           CircleAvatar(
@@ -30,25 +32,23 @@ class FormPaso1Cuenta extends StatelessWidget {
           SizedBox(height: 20),
           Text(
             'Añade una descripción',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           SizedBox(height: 10),
           _InputDescripcion(Size),
           SizedBox(height: 20),
           Container(
             //color: Colors.green,
-            height: Size.height * 0.2,       
+            height: Size.height * 0.2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
               children: [
                 Container(
                   width: 160,
                   height: 50,
                   child: ElevatedButton(
-                     onPressed: () {
-                      
-                    },
+                    onPressed: () {},
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
@@ -56,7 +56,13 @@ class FormPaso1Cuenta extends StatelessWidget {
                       ),
                       backgroundColor: Colors.white,
                     ),
-                    child: Text('OMITIR', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+                    child: Text(
+                      'OMITIR',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
                   ),
                 ),
                 Container(
@@ -64,7 +70,10 @@ class FormPaso1Cuenta extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Paso2Cuenta()));
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -73,7 +82,13 @@ class FormPaso1Cuenta extends StatelessWidget {
                       ),
                       backgroundColor: Colors.black,
                     ),
-                    child: Text('SIGUIENTE', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                    child: Text(
+                      'SIGUIENTE',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
                   ),
                 ),
               ],
@@ -87,7 +102,7 @@ class FormPaso1Cuenta extends StatelessWidget {
   Container _InputDescripcion(Size Size) {
     return Container(
       width: Size.width * 0.8,
-      height: Size.height*0.2,
+      height: Size.height * 0.2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Colors.grey),
