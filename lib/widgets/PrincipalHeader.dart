@@ -21,7 +21,7 @@ class PrincipalHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Cd",style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
+          Text("C",style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
           ),
           Icon( FontAwesomeIcons.book,size: iconsSize, color:textColor ,
           ),

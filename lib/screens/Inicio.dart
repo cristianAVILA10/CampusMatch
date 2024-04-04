@@ -1,5 +1,6 @@
 import 'package:campusmatch/screens/Resgistrame.dart';
 import 'package:campusmatch/screens/Login.dart';
+import 'package:campusmatch/widgets/PrincipalHeader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,20 +17,7 @@ class Inicio extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Container(
-              width: double.infinity,
-              //color: Colors.amber,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("C", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold ),),
-                  Icon(FontAwesomeIcons.book, size: 35,),
-                  Text("mpusM", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold ),),
-                  Icon(FontAwesomeIcons.solidHeart, size: 35,),
-                  Text("tch", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold ),),
-                ],
-              ),
-            ),
+            child: PrincipalHeader(fontSize: 50, iconsSize: 35, textColor: Colors.black,),
           ),
           Container(
             //color: Colors.green,

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         '/': (context)=> Inicio(),
       },
       theme: ThemeData.light().copyWith(
-        appBarTheme:  AppBarTheme(color: Colors.blueAccent)
+       // appBarTheme:  AppBarTheme(color: Colors.blueAccent)
       ),
     );
   }

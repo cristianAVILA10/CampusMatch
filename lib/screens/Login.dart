@@ -19,7 +19,6 @@ class Login extends StatelessWidget {
           children: [
             //Expanded(
               Container(
-              child: Container(
                 width: double.infinity,
                 height: Size.height * 0.15, 
                 //color: Colors.amber,
@@ -34,7 +33,6 @@ class Login extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
         
           FormLogin(),
         
