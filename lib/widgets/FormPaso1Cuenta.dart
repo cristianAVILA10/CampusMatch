@@ -13,7 +13,7 @@ class FormPaso1Cuenta extends StatelessWidget {
         children: [
           SizedBox(height: 20),
           Text(
-            'Subir foto de perfil',
+            'Subir foto ssssde perfil',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           SizedBox(height: 10),

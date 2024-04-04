@@ -7,7 +7,6 @@ void main(){
 }
 
 class MyApp extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
         '/': (context)=> Inicio(),
       },
       theme: ThemeData.light().copyWith(
-        //appBarTheme: AppBarTheme(color: Colors.blueAccent)
+        appBarTheme:  AppBarTheme(color: Colors.blueAccent)
       ),
     );
   }
