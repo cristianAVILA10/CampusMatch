@@ -33,10 +33,7 @@ class Login extends StatelessWidget {
                   ],
                 ),
               ),
-        
           FormLogin(),
-        
-        
           ],
               ),
       ),

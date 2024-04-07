@@ -46,7 +46,7 @@ class _FormLoginState extends State<FormLogin> {
               ),
               backgroundColor: Colors.black,
               ),
-              child: Text('INICIAR SECCIÓN', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+              child: Text('INICIAR SESION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
             ),
           ),
           SizedBox(
@@ -57,7 +57,15 @@ class _FormLoginState extends State<FormLogin> {
               Navigator.push(context, MaterialPageRoute(builder: (context)=> Recuperacion()));
             },
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 1), 
+              padding: EdgeInsets.symmetric(vertical: 1),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey,
+                    width: 1,
+                  ),
+                ),
+              ), 
               child: 
                 Text('¿Has olvidado la contraseña?',
                   style: TextStyle(
@@ -66,14 +74,6 @@ class _FormLoginState extends State<FormLogin> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Colors.grey,
-                    width: 1,
-                  ),
-                ),
-              ),
             ),
           ), 
         ],   
