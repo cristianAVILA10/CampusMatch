@@ -7,9 +7,15 @@ class PrincipalHeader extends StatelessWidget {
   final double fontSize;
   final double iconsSize;
   final Color textColor;
+  final FontWeight? fontWeight;
 
-  const PrincipalHeader({required this.fontSize, required this.iconsSize, required this.textColor});
-  
+  const PrincipalHeader({
+    required this.fontSize,
+    required this.iconsSize,
+    required this.textColor,
+    FontWeight? fontWeight, 
+  }) : fontWeight = fontWeight ?? FontWeight.bold;
+
   @override
   Widget build(BuildContext context) {
      final Size = MediaQuery.of(context).size;
@@ -21,15 +27,15 @@ class PrincipalHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("C",style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
+          Text("C",style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor),
           ),
           Icon( FontAwesomeIcons.book,size: iconsSize, color:textColor ,
           ),
-          Text( "mpusM", style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
+          Text( "mpusM", style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor),
           ),
           Icon(FontAwesomeIcons.solidHeart,size: iconsSize,color:textColor 
           ),
-          Text("tch",style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: textColor),
+          Text("tch",style: TextStyle(fontSize: fontSize, fontWeight: fontWeight, color: textColor),
           ),
         ],
       ),
