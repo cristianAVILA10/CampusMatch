@@ -4,6 +4,7 @@ import 'package:campusmatch/widgets/PrincipalHeader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:campusmatch/utils/rutas.dart' as routes;
 
 class Inicio extends StatelessWidget {
   const Inicio({super.key});
@@ -17,21 +18,24 @@ class Inicio extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: PrincipalHeader(fontSize: 50, iconsSize: 35, textColor: Colors.black,),
+            child: PrincipalHeader(
+              fontSize: 50,
+              iconsSize: 35,
+              textColor: Colors.black,
+            ),
           ),
           Container(
             //color: Colors.green,
-            height: Size.height * 0.2,       
+            height: Size.height * 0.2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
               children: [
                 Container(
                   width: 160,
                   height: 50,
                   child: ElevatedButton(
-                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Login()));
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/login');
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -40,7 +44,13 @@ class Inicio extends StatelessWidget {
                       ),
                       backgroundColor: Colors.white,
                     ),
-                    child: Text('INGRESA', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
+                    child: Text(
+                      'INGRESA',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
                   ),
                 ),
                 Container(
@@ -48,7 +58,7 @@ class Inicio extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> Registrame()));
+                      Navigator.pushNamed(context, routes.regisrarme);
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -57,7 +67,13 @@ class Inicio extends StatelessWidget {
                       ),
                       backgroundColor: Colors.black,
                     ),
-                    child: Text('REGISTRARME', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+                    child: Text(
+                      'REGISTRARME',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
                   ),
                 ),
               ],
@@ -68,5 +84,3 @@ class Inicio extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,8 +1,7 @@
-import 'package:campusmatch/screens/Inicio.dart';
 import 'package:flutter/material.dart';
-import 'package:campusmatch/screens/screens.dart';
+import 'package:campusmatch/utils/rutas.dart' as routes;
 
-void main(){
+void main() {
   runApp(MyApp());
 }
 
@@ -12,12 +11,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
-      routes: {
-        '/': (context)=> Inicio(),
-      },
+      routes: routes.rutas,
       theme: ThemeData.light().copyWith(
-       // appBarTheme:  AppBarTheme(color: Colors.blueAccent)
-      ),
+          // appBarTheme:  AppBarTheme(color: Colors.blueAccent)
+          ),
     );
   }
 }
