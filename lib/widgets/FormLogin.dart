@@ -1,7 +1,14 @@
+import 'package:campusmatch/Models/User.dart';
 import 'package:campusmatch/screens/HomePage.dart';
 import 'package:campusmatch/screens/Recuperacion.dart';
+import 'package:campusmatch/widgets/FormInput.dart';
+import 'package:campusmatch/widgets/MensajeWarning.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:campusmatch/utils/rutas.dart' as routes;
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class FormLogin extends StatefulWidget {
   const FormLogin({super.key});
@@ -11,6 +18,9 @@ class FormLogin extends StatefulWidget {
 }
 
 class _FormLoginState extends State<FormLogin> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _contrasenaController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final Size = MediaQuery.of(context).size;
@@ -24,11 +34,11 @@ class _FormLoginState extends State<FormLogin> {
           SizedBox(
             height: 15,
           ),
-          _InputEmail(Size),
+          FormInput(controller: _emailController, hintText: 'Correo@ominio.com', keyboardType: TextInputType.emailAddress, obscureText:false ),
           SizedBox(
             height: 15,
-                  ),
-          _InputContrasena(Size),
+          ),
+          FormInput(controller: _contrasenaController, hintText: 'contraseña', keyboardType: TextInputType.visiblePassword, obscureText:true ),
           SizedBox(
             height: 15,
           ),
@@ -37,16 +47,25 @@ class _FormLoginState extends State<FormLogin> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> HomePage()));
+                // Obtener el valor del campo de correo electrónico
+                String email = _emailController.text;
+                String contrasena = _contrasenaController.text;
+                handleSubmit(email, contrasena, context);
               },
               style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-                side: BorderSide(color: Colors.black, width: 3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  side: BorderSide(color: Colors.black, width: 3),
+                ),
+                backgroundColor: Colors.black,
               ),
-              backgroundColor: Colors.black,
+              child: Text(
+                'INICIAR SESION',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
-              child: Text('INICIAR SESION', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
             ),
           ),
           SizedBox(
@@ -54,7 +73,8 @@ class _FormLoginState extends State<FormLogin> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> Recuperacion()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Recuperacion()));
             },
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 1),
@@ -65,59 +85,71 @@ class _FormLoginState extends State<FormLogin> {
                     width: 1,
                   ),
                 ),
-              ), 
-              child: 
-                Text('¿Has olvidado la contraseña?',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              child: Text(
+                '¿Has olvidado la contraseña?',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
             ),
-          ), 
-        ],   
+          ),
+        ],
       ),
     );
   }
 
-  Container _InputEmail(Size Size) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: Colors.grey),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-      margin: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        style: TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "Correo@dominio.com",
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    // Limpiar el controlador al destruir el widget para evitar fugas de memoria
+    _emailController.dispose();
+    super.dispose();
+  }
+}
+
+void handleSubmit(String email, String contrasena, BuildContext context) {
+  // Esta función manejará la lógica para procesar el correo electrónico ingresado
+  print("Correo electrónico ingresado: $email");
+  print("contrasena ingresado: $contrasena");
+  getOnDisplayNowPlayingMovie();
+  if(contrasena == '123'){
+    print("pasaaaaaa");
+    Navigator.pushNamed(context, routes.homePage);
+  }else{
+    MensajeWarning(context, 'Sin Acceso', 'Correo o contraseña invalida', 'Aceptar');
+    print("no pasaaaa");
   }
 
-  Container _InputContrasena(Size Size) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(5),
-      border: Border.all(color: Colors.grey),
-    ),
-    padding: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-    margin: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-    child: TextFormField(
-      keyboardType: TextInputType.text,
-      style: TextStyle(fontSize: 16),
-      obscureText: true, // Oculta el texto ingresado
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: "Contraseña",
-      ),
-    ),
-  );
 }
 
+
+class UserService {
+  static Future<User> obtenerUser(String email, String password) async {
+    final url = Uri.parse('http://192.168.239.1:8080/api-user/users');
+
+    final respuesta = await http.get(url);
+
+    if (respuesta.statusCode == 200) {
+      // Si la solicitud es exitosa, parseamos los datos JSON
+      final datosJson = jsonDecode(respuesta.body);
+      return User.fromJson(datosJson);
+    } else {
+      // Si la solicitud falla, lanzamos una excepción o devolvemos null, dependiendo de tu lógica de manejo de errores
+      throw Exception('Error al obtener el User: ${respuesta.statusCode}');
+    }
+  }
 }
+
+void getOnDisplayNowPlayingMovie() async {
+  try {
+    final User = await UserService.obtenerUser('holka', 'fdfd');
+    print('User obtenido: ${User.nombre}');
+  } catch (error) {
+    print('Error: $error');
+  }
+}
+
+
+

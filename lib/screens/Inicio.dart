@@ -35,7 +35,7 @@ class Inicio extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/login');
+                      Navigator.pushNamed(context, routes.login);
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
