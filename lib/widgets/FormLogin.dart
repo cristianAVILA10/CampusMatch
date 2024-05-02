@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:campusmatch/Models/User.dart';
+import 'package:campusmatch/provider/UserService.dart';
 import 'package:campusmatch/screens/HomePage.dart';
 import 'package:campusmatch/screens/Recuperacion.dart';
 import 'package:campusmatch/widgets/FormInput.dart';
@@ -50,7 +53,7 @@ class _FormLoginState extends State<FormLogin> {
                 // Obtener el valor del campo de correo electrónico
                 String email = _emailController.text;
                 String contrasena = _contrasenaController.text;
-                handleSubmit(email, contrasena, context);
+                login(email, contrasena, context);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -109,47 +112,13 @@ class _FormLoginState extends State<FormLogin> {
   }
 }
 
-void handleSubmit(String email, String contrasena, BuildContext context) {
+void login(String email, String contrasena, BuildContext context) {
   // Esta función manejará la lógica para procesar el correo electrónico ingresado
   print("Correo electrónico ingresado: $email");
   print("contrasena ingresado: $contrasena");
-  getOnDisplayNowPlayingMovie();
-  if(contrasena == '123'){
-    print("pasaaaaaa");
-    Navigator.pushNamed(context, routes.homePage);
-  }else{
-    MensajeWarning(context, 'Sin Acceso', 'Correo o contraseña invalida', 'Aceptar');
-    print("no pasaaaa");
-  }
-
+  var userService = UserService();
+  userService.login(email, contrasena, context);
+ 
 }
-
-
-class UserService {
-  static Future<User> obtenerUser(String email, String password) async {
-    final url = Uri.parse('http://192.168.239.1:8080/api-user/users');
-
-    final respuesta = await http.get(url);
-
-    if (respuesta.statusCode == 200) {
-      // Si la solicitud es exitosa, parseamos los datos JSON
-      final datosJson = jsonDecode(respuesta.body);
-      return User.fromJson(datosJson);
-    } else {
-      // Si la solicitud falla, lanzamos una excepción o devolvemos null, dependiendo de tu lógica de manejo de errores
-      throw Exception('Error al obtener el User: ${respuesta.statusCode}');
-    }
-  }
-}
-
-void getOnDisplayNowPlayingMovie() async {
-  try {
-    final User = await UserService.obtenerUser('holka', 'fdfd');
-    print('User obtenido: ${User.nombre}');
-  } catch (error) {
-    print('Error: $error');
-  }
-}
-
 
 

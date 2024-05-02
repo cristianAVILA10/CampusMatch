@@ -3,11 +3,13 @@ import 'package:campusmatch/screens/Login.dart';
 import 'package:campusmatch/screens/Paso1Cuenta.dart';
 import 'package:campusmatch/screens/Resgistrame.dart';
 import 'package:campusmatch/screens/screens.dart';
+import 'package:campusmatch/widgets/SignInDemo.dart';
 import 'package:flutter/material.dart';
 
 final regisrarme = "/regis";
 final login = "/login";
 final homePage = "/homepage";
+final signGoogle = "/signgoogle";
 
 Map<String, Widget Function(BuildContext)> rutas = {
   '/': (context) => Inicio(),
@@ -15,4 +17,5 @@ Map<String, Widget Function(BuildContext)> rutas = {
   login: (context) => Login(),
   homePage: (context) => HomePage(),
   '/paso1cuenta': (context) => Paso1Cuenta(),
+  signGoogle: (context) => Paso1Cuenta()
 };

@@ -1,7 +1,11 @@
+import 'package:campusmatch/provider/UserService.dart';
+import 'package:campusmatch/widgets/FormInput.dart';
+import 'package:campusmatch/widgets/MensajeWarning.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:campusmatch/screens/Paso1Cuenta.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:campusmatch/utils/rutas.dart' as routes;
 
 class FormRegistrarme extends StatefulWidget {
   const FormRegistrarme({super.key});
@@ -11,6 +15,9 @@ class FormRegistrarme extends StatefulWidget {
 }
 
 class _FormRegistrarmeState extends State<FormRegistrarme> {
+  TextEditingController _userontroller = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _contrasenaController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final Size = MediaQuery.of(context).size;
@@ -20,27 +27,45 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
         children: [
           Container(
             //color: Colors.greenAccent,
-            child: 
-              Text('Cree una cuenta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
+            child: Text(
+              'Cree una cuenta',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
           ),
-                
           Container(
             //color: Colors.grey,
-            child: 
-              Text('Escriba su email para crear una', style: TextStyle(fontSize: 16,  color: Colors.black),),
+            child: Text(
+              'Escriba su email para crear una',
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
           ),
           SizedBox(
             height: 15,
           ),
-          _InputNombre(Size),
+          FormInput(
+              controller: _userontroller,
+              hintText: 'Nombre de usuario',
+              keyboardType: TextInputType.text,
+              obscureText: false),
           SizedBox(
             height: 15,
           ),
-          _InputEmail(Size),
+          FormInput(
+              controller: _emailController,
+              hintText: 'Correo@dominio.com',
+              keyboardType: TextInputType.emailAddress,
+              obscureText: false),
           SizedBox(
             height: 15,
           ),
-          _InputContrasena(Size),
+          FormInput(
+              controller: _contrasenaController,
+              hintText: 'Contraseña',
+              keyboardType: TextInputType.emailAddress,
+              obscureText: true),
           SizedBox(
             height: 15,
           ),
@@ -49,28 +74,37 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> Paso1Cuenta()));
+                //Navigator.push(context, MaterialPageRoute(builder: (context) => Paso1Cuenta()));
+                String usuario = _userontroller.text;
+                String email = _emailController.text;
+                String contrasena = _contrasenaController.text;
+                handleSubmit(usuario, email, contrasena, context);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(5),
                   side: BorderSide(color: Colors.black, width: 3),
                 ),
                 backgroundColor: Colors.black,
               ),
-              child: Text('CREAR CUENTA', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+              child: Text(
+                'CREAR CUENTA',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
             ),
           ),
           SizedBox(
             height: 20,
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 height: 1,
-                width: (Size.width * 0.8 - 100) / 2, 
+                width: (Size.width * 0.8 - 100) / 2,
                 color: Colors.grey,
               ),
               Padding(
@@ -82,8 +116,8 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
               ),
               Container(
                 height: 1,
-                width: (Size.width * 0.8 - 100) / 2, 
-                color: Colors.grey, 
+                width: (Size.width * 0.8 - 100) / 2,
+                color: Colors.grey,
               ),
             ],
           ),
@@ -96,6 +130,7 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
             child: ElevatedButton(
               onPressed: () {
                 // Lógica Google
+                Navigator.pushNamed(context, routes.signGoogle);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -107,11 +142,19 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(FontAwesomeIcons.google, color: Colors.black,),
-                  SizedBox(width: 5), // Ajusta el espacio entre la imagen y el texto según sea necesario
+                  Icon(
+                    FontAwesomeIcons.google,
+                    color: Colors.black,
+                  ),
+                  SizedBox(
+                      width:
+                          5), // Ajusta el espacio entre la imagen y el texto según sea necesario
                   Text(
                     'Google',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                 ],
               ),
@@ -122,62 +165,11 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
     );
   }
 
-   Container _InputNombre(Size Size) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: Colors.grey),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-      margin: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-      child: TextFormField(
-        keyboardType: TextInputType.text,
-        style: TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "Nombre de usuario",
-        ),
-      ),
-    );
+  void handleSubmit(String usuario, String email, String contrasena, BuildContext context) {
+    // Esta función manejará la lógica para procesar el correo electrónico ingresado
+    print("Correo electrónico ingresado: $email");
+    print("contrasena ingresado: $contrasena");
+    var userService = UserService();
+    userService.setUsuario(usuario, email, contrasena, context);
   }
-
-  Container _InputEmail(Size Size) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: Colors.grey),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-      margin: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        style: TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "Correo@dominio.com",
-        ),
-      ),
-    );
-  }
-
-  Container _InputContrasena(Size Size) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(5),
-      border: Border.all(color: Colors.grey),
-    ),
-    padding: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-    margin: EdgeInsets.symmetric(horizontal: Size.width * 0.05),
-    child: TextFormField(
-      keyboardType: TextInputType.text,
-      style: TextStyle(fontSize: 16),
-      obscureText: true, // Oculta el texto ingresado
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: "Contraseña",
-      ),
-    ),
-  );
-}
-
 }
