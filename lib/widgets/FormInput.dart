@@ -5,13 +5,19 @@ class FormInput extends StatelessWidget {
   final String hintText;
   final TextInputType keyboardType;
   final bool obscureText ;
-  const FormInput({super.key, required this.controller, required this.hintText, required this.keyboardType, required this.obscureText});
+  final double?  width;  
+  final double?  height; 
+  const FormInput({super.key, required this.controller, 
+                   required this.hintText, required this.keyboardType, 
+                   required this.obscureText,  this.width = 0.9, this.height =  0.06});
   @override
   Widget build(BuildContext context) {
 
      final Size = MediaQuery.of(context).size;
     // TODO: implement build
     return Container(
+      width: Size.width * width!,
+      height: Size.height * height!,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
         border: Border.all(color: Colors.grey),

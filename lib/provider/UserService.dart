@@ -1,6 +1,7 @@
 //servicios de  usuarios
 import 'dart:convert';
 
+import 'package:campusmatch/screens/Paso1Cuenta.dart';
 import 'package:campusmatch/widgets/MensajeWarning.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -30,8 +31,31 @@ class UserService {
     }
   }
 
+  static Future<User> obtenerUserbyId(int id) async {
+    final url =
+        Uri.parse('http://192.168.1.12:8080/api-user/userbyid?id=${id}');
+
+    final respuesta = await http.get(url);
+
+    if (respuesta.statusCode == 200) {
+      print("Solicitud correcta");
+      // Si la solicitud es exitosa, parseamos los datos JSON
+      final datosJson = jsonDecode(respuesta.body);
+      if (datosJson is List && datosJson.isNotEmpty) {
+        // Si recibimos una lista de usuarios, tomamos el primero
+        return User.fromJson(datosJson[0]);
+      } else {
+        throw Exception('No se encontró un usuario');
+      }
+    } else {
+      // Si la solicitud falla, lanzamos una excepción o devolvemos null, dependiendo de tu lógica de manejo de errores
+      throw Exception('Error al obtener el User: ${respuesta.statusCode}');
+    }
+  }
+
   //CREA USUARIO
-  static Future<User> crearUser(String usuario, String email, String password, BuildContext context) async {
+  static Future<User> crearUser(String usuario, String email, String password,
+      BuildContext context) async {
     final url = Uri.parse('http://192.168.1.12:8080/api-user/setuser');
 
     // Crear un mapa con los datos del usuario
@@ -52,23 +76,29 @@ class UserService {
         body: jsonEncode(datosUsuario), // Convertir el mapa de datos a JSON
       );
 
-      if (respuesta.statusCode < 300  || respuesta.statusCode >= 200) {
+      if (respuesta.statusCode < 300 || respuesta.statusCode >= 200) {
         print("Solicitud correcta");
 
         final datosJson = jsonDecode(respuesta.body);
-        return User.fromJson(datosJson);
+        final nuevoUsuario = User.fromJson(datosJson);
+
+        // Configurar el usuario actual en UsuarioActual
+        UsuarioActual.instancia.usuario = nuevoUsuario;
+
+        return nuevoUsuario;
       } else {
-        MensajeWarning(context, 'Error', respuesta.statusCode.toString(),'Aceptar');
+        MensajeWarning(
+            context, 'Error', respuesta.statusCode.toString(), 'Aceptar');
         throw Exception('Error al crear el usuario: ${respuesta.statusCode}');
       }
     } catch (e) {
-      MensajeWarning(context, 'Error',e.toString(),'Aceptar');
+      MensajeWarning(context, 'Error', e.toString(), 'Aceptar');
       throw Exception('Error al crear el usuario: $e');
     }
   }
 
-
-  static Future<User> loginIn(String email, String password, BuildContext context) async {
+  static Future<User> loginIn(
+      String email, String password, BuildContext context) async {
     final url = Uri.parse('http://192.168.1.12:8080/api-user/login');
 
     // Crear un mapa con los datos del usuario
@@ -87,26 +117,31 @@ class UserService {
         body: jsonEncode(datosUsuario), // Convertir el mapa de datos a JSON
       );
 
-      if (respuesta.statusCode < 300  || respuesta.statusCode >= 200) {
+      if (respuesta.statusCode < 300 || respuesta.statusCode >= 200) {
         print("Solicitud correcta");
 
         final datosJson = jsonDecode(respuesta.body);
         Navigator.pushNamed(context, routes.homePage);
         return User.fromJson(datosJson);
       } else {
-        MensajeWarning(context, 'Error', respuesta.statusCode.toString(),'Aceptar');
+        MensajeWarning(
+            context, 'Error', respuesta.statusCode.toString(), 'Aceptar');
         throw Exception('Error al crear el usuario: ${respuesta.statusCode}');
       }
     } catch (e) {
-      MensajeWarning(context, 'Error',e.toString(),'Aceptar');
+      MensajeWarning(context, 'Error', e.toString(), 'Aceptar');
       throw Exception('Error al crear el usuario: $e');
     }
   }
 
-  void setUsuario(String usuario, String email, String contrasena, BuildContext context) async {
+  void setUsuario(String usuario, String email, String contrasena,
+      BuildContext context) async {
     try {
-      final User = await UserService.crearUser(usuario, email, contrasena, context);
-      print('User obtenido: ${User.nombre}');
+      final user =
+          await UserService.crearUser(usuario, email, contrasena, context);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Paso1Cuenta()));
+      print('User obtenido: ${user.nombre}');
     } catch (error) {
       print('Error: $error');
     }
@@ -120,5 +155,4 @@ class UserService {
       print('Error: $error');
     }
   }
-
 }

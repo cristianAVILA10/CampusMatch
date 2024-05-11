@@ -1,13 +1,28 @@
+import 'dart:math';
+
+import 'package:campusmatch/Models/User.dart';
+import 'package:campusmatch/widgets/FormInput.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:campusmatch/screens/Paso2Cuenta.dart';
+import 'package:campusmatch/utils/rutas.dart' as routes;
 
-class FormPaso1Cuenta extends StatelessWidget {
+class FormPaso1Cuenta extends StatefulWidget {
   const FormPaso1Cuenta({Key? key}) : super(key: key);
+
+  @override
+  _FormPaso1CuentaState createState() => _FormPaso1CuentaState();
+}
+
+class _FormPaso1CuentaState extends State<FormPaso1Cuenta> {
+  TextEditingController _despontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final Size = MediaQuery.of(context).size;
+    String imageUrl = UsuarioActual.instancia.usuario.getImagen ?? '';
+print('imagen');
+print(imageUrl);
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -15,13 +30,18 @@ class FormPaso1Cuenta extends StatelessWidget {
           SizedBox(height: 20),
           Text(
             'Subir foto de perfil',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           SizedBox(height: 10),
-          CircleAvatar(
-            backgroundColor: Colors.grey,
+          ImageInputCircle(
             radius: 70,
-            // Aquí puedes poner la imagen del perfil
+            imageUrl: imageUrl,
+            onTap: () {
+              print('tap');
+              print(UsuarioActual.instancia.usuario.getImagen);
+              Navigator.pushNamed(context, routes.cargaImage);
+            },
           ),
           SizedBox(height: 10),
           Text(
@@ -35,10 +55,15 @@ class FormPaso1Cuenta extends StatelessWidget {
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           SizedBox(height: 10),
-          _InputDescripcion(Size),
+          FormInput(
+              controller: _despontroller,
+              hintText: 'Descripción',
+              keyboardType: TextInputType.text,
+              obscureText: false,
+              width: 0.8,
+              height: 0.2),
           SizedBox(height: 20),
           Container(
-            //color: Colors.green,
             height: Size.height * 0.2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -97,24 +122,31 @@ class FormPaso1Cuenta extends StatelessWidget {
       ),
     );
   }
+}
 
-  Container _InputDescripcion(Size Size) {
-    return Container(
-      width: Size.width * 0.8,
-      height: Size.height * 0.2,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: Colors.grey),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: TextFormField(
-        keyboardType: TextInputType.multiline,
-        maxLines: null,
-        style: TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: "Descripción",
-        ),
+
+
+class ImageInputCircle extends StatelessWidget {
+  final String? imageUrl;
+  final double radius;
+  final VoidCallback onTap;
+
+  const ImageInputCircle({
+    Key? key,
+    this.imageUrl,
+    required this.radius,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: CircleAvatar(
+        backgroundColor: Colors.grey,
+        radius: radius,
+        backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
+        child: imageUrl == null ? Icon(Icons.add_a_photo, size: radius * 0.5) : null,
       ),
     );
   }
