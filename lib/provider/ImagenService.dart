@@ -1,4 +1,5 @@
 import 'package:campusmatch/Models/User.dart';
+import 'package:campusmatch/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:campusmatch/provider/UserService.dart';
@@ -9,7 +10,7 @@ class  ImagenService{
   Future<String> uploadImage(File imageFile, int id, String numimagen) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.12:8080/api-user/upload'),
+      Uri.parse('http://${hostGlobal}:8080/api-user/upload'),
     );
     
     // Agregar el archivo al cuerpo de la solicitud

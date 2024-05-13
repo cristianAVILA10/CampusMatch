@@ -1,6 +1,8 @@
 //servicios de  usuarios
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:campusmatch/main.dart';
 import 'package:campusmatch/screens/Paso1Cuenta.dart';
 import 'package:campusmatch/widgets/MensajeWarning.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,7 @@ import 'package:campusmatch/Models/User.dart';
 
 class UserService {
   static Future<User> obtenerUser(String email, String password) async {
-    final url = Uri.parse('http://192.168.1.12:8080/api-user/users');
+    final url = Uri.parse('http://${hostGlobal}:8080/api-user/users');
 
     final respuesta = await http.get(url);
 
@@ -33,7 +35,7 @@ class UserService {
 
   static Future<User> obtenerUserbyId(int id) async {
     final url =
-        Uri.parse('http://192.168.1.12:8080/api-user/userbyid?id=${id}');
+        Uri.parse('http://${hostGlobal}:8080/api-user/userbyid?id=${id}');
 
     final respuesta = await http.get(url);
 
@@ -56,16 +58,16 @@ class UserService {
   //CREA USUARIO
   static Future<User> crearUser(String usuario, String email, String password,
       BuildContext context) async {
-    final url = Uri.parse('http://192.168.1.12:8080/api-user/setuser');
-
+    final url = Uri.parse('http://${hostGlobal}:8080/api-user/setuser');
+    Random random = Random();
     // Crear un mapa con los datos del usuario
     final Map<String, String> datosUsuario = {
       'usuario': usuario,
       'email': email,
       'password': password,
-      'nombre': "nom2",
-      'imageAsset': "http://192.168.1.12:8080/api-user/getimg/93_pipe_1.jpg",
-      'distance': "2 kilometros",
+      'nombre': usuario,
+      'imageAsset': "http://${hostGlobal}:8080/api-user/getimg/${email}_1.jpg",
+      'distance': "${random.nextInt(10) + 1} kilometros",
     };
 
     try {
@@ -100,8 +102,8 @@ class UserService {
   }
 
   static Future<User> setDescripcion(int id, String descripcion) async {
-    final url = Uri.parse('http://192.168.1.12:8080/api-user/$id/descripcion');
-print(url);
+    final url = Uri.parse('http://${hostGlobal}:8080/api-user/$id/descripcion');
+    print(url);
     // Crear un usuario con solo la nueva descripción
     final Map<String, dynamic> datosUsuario = {
       'descripcion': descripcion,
@@ -120,10 +122,12 @@ print(url);
         // Si la solicitud es exitosa, devuelve el usuario actualizado
         final datosJson = jsonDecode(respuesta.body);
         final nuevoUsuario = User.fromJson(datosJson);
+          print('pasa 1.1');
         return nuevoUsuario;
       } else {
         // Manejo de errores
-        throw Exception('Error al actualizar la descripción del usuario: ${respuesta.statusCode}');
+        throw Exception(
+            'Error al actualizar la descripción del usuario: ${respuesta.statusCode}');
       }
     } catch (e) {
       // Manejo de excepciones
@@ -133,7 +137,7 @@ print(url);
 
   static Future<User> loginIn(
       String email, String password, BuildContext context) async {
-    final url = Uri.parse('http://192.168.1.12:8080/api-user/login');
+    final url = Uri.parse('http://${hostGlobal}:8080/api-user/login');
 
     // Crear un mapa con los datos del usuario
     final Map<String, String> datosUsuario = {
@@ -181,16 +185,16 @@ print(url);
     }
   }
 
-  void actDescripcion( String descripcion,
-      BuildContext context) async {
-
-        print('descripcion: $descripcion id: ${UsuarioActual.instancia.usuario.getId}');
+  void actDescripcion(String descripcion, BuildContext context) async {
+    print( 'descripcion: $descripcion id: ${UsuarioActual.instancia.usuario.getId}');
     try {
+       print('pasa 1');
       final user = await UserService.setDescripcion(UsuarioActual.instancia.usuario.getId, descripcion);
+        print('pasa 2');
       Navigator.pushNamed(context, routes.paso2Cuenta);
       print('User obtenido: ${user.nombre}');
     } catch (error) {
-      print('Error: $error');
+      print('Error 1: $error');
     }
   }
 

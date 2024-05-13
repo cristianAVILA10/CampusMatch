@@ -35,7 +35,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
         print('entra state 2: ');
         imagenService.uploadImage(_imageFile!,UsuarioActual.instancia.usuario.getId, widget.numImagen);
         
-        Navigator.pushNamed(context, routes.paso2Cuenta);
+
+        if (widget.numImagen == "fotoperfil"){
+             Navigator.pushNamed(context, routes.paso1Cuenta);
+        }else{
+          Navigator.pushNamed(context, routes.paso2Cuenta);
+        }
       });
     }
   }

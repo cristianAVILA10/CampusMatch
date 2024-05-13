@@ -1,10 +1,12 @@
-import 'package:campusmatch/main.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'package:campusmatch/Models/User.dart';
+import 'package:campusmatch/Models/profile.dart';
+import 'package:campusmatch/main.dart';
 import 'package:campusmatch/widgets/action_button_widget.dart';
 import 'package:campusmatch/widgets/drag_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class CardsStackWidget extends StatefulWidget {
   const CardsStackWidget({Key? key}) : super(key: key);
@@ -34,11 +36,12 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
         swipeNotifier.value = Swipe.none;
       }
     });
+    // Llamar a la función para cargar los usuarios al iniciar el widget
     loadUsers();
   }
 
   Future<void> loadUsers() async {
-    final String apiUrl = 'http://192.168.1.12:8080/api-user/users'; // Reemplaza con la URL real de tu servicio
+    final String apiUrl = 'http://192.168.1.12:8080/api-user/users';
     try {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
@@ -47,10 +50,10 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
           draggableItems = data.map((json) => User.fromJson(json)).toList();
         });
       } else {
-        throw Exception('Failed to load Users');
+        throw Exception('Failed to load users');
       }
     } catch (e) {
-      print('Error loading Users: $e');
+      print('Error loading users: $e');
     }
   }
 
@@ -107,7 +110,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
                         user: draggableItems[index],
                         index: index,
                         swipeNotifier: swipeNotifier,
-                        isLastCard: true
+                        isLastCard: true,
                       ),
                     ),
                   );

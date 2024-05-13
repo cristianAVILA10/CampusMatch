@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:campusmatch/Models/Interes.dart';
 import 'package:campusmatch/Models/User.dart';
+import 'package:campusmatch/main.dart';
 import 'package:http/http.dart' as http;
 
 class InteresService {
   // URL de tu API o base de datos donde se encuentran los datos de los intereses
-  final String apiUrl = 'http://192.168.1.12:8080/api/intereses';
+  final String apiUrl = 'http://${hostGlobal}:8080/api/intereses';
 
   // Método para obtener los intereses desde la API o base de datos
   Future<List<Interes>> obtenerIntereses() async {

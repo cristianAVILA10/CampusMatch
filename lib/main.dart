@@ -23,3 +23,4 @@ class MyApp extends StatelessWidget {
 }
 
 enum Swipe { left, right, none }
+const String hostGlobal = "192.168.1.12";

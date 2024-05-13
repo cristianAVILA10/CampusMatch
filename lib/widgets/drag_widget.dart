@@ -13,6 +13,7 @@ class DragWidget extends StatefulWidget {
     required this.swipeNotifier,
     this.isLastCard = false,
   }) : super(key: key);
+
   final User user;
   final int index;
   final ValueNotifier<Swipe> swipeNotifier;
@@ -94,42 +95,38 @@ class _DragWidgetState extends State<DragWidget> {
           color: Colors.transparent,
         ),
 
-        //This will be visible when we press action button
-        child: ValueListenableBuilder(
-            valueListenable: widget.swipeNotifier,
-            builder: (BuildContext context, Swipe swipe, Widget? child) {
-              return Stack(
-                children: [
-                  UserCard(user: widget.user),
-                  // heck if this is the last card and Swipe is not equal to Swipe.none
-                  swipe != Swipe.none && widget.isLastCard
-                      ? swipe == Swipe.right
-                          ? Positioned(
-                              top: 40,
-                              left: 20,
-                              child: Transform.rotate(
-                                angle: 12,
-                                child: TagWidget(
-                                  text: 'LIKE',
-                                  color: Colors.green[400]!,
-                                ),
-                              ),
-                            )
-                          : Positioned(
-                              top: 50,
-                              right: 24,
-                              child: Transform.rotate(
-                                angle: -12,
-                                child: TagWidget(
-                                  text: 'DISLIKE',
-                                  color: Colors.red[400]!,
-                                ),
-                              ),
-                            )
-                      : const SizedBox.shrink(),
-                ],
-              );
-            }),
+        // This will be visible when we press action button
+        child: Stack(
+          children: [
+            UserCard(user: widget.user),
+            // Check if this is the last card and Swipe is not equal to Swipe.none
+            widget.swipeNotifier.value != Swipe.none && widget.isLastCard
+                ? widget.swipeNotifier.value == Swipe.right
+                    ? Positioned(
+                        top: 40,
+                        left: 20,
+                        child: Transform.rotate(
+                          angle: 12,
+                          child: TagWidget(
+                            text: 'LIKE',
+                            color: Colors.green[400]!,
+                          ),
+                        ),
+                      )
+                    : Positioned(
+                        top: 50,
+                        right: 24,
+                        child: Transform.rotate(
+                          angle: -12,
+                          child: TagWidget(
+                            text: 'DISLIKE',
+                            color: Colors.red[400]!,
+                          ),
+                        ),
+                      )
+                : const SizedBox.shrink(),
+          ],
+        ),
       ),
     );
   }
