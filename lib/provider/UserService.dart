@@ -64,6 +64,8 @@ class UserService {
       'email': email,
       'password': password,
       'nombre': "nom2",
+      'imageAsset': "http://192.168.1.12:8080/api-user/getimg/93_pipe_1.jpg",
+      'distance': "2 kilometros",
     };
 
     try {
@@ -94,6 +96,38 @@ class UserService {
     } catch (e) {
       MensajeWarning(context, 'Error', e.toString(), 'Aceptar');
       throw Exception('Error al crear el usuario: $e');
+    }
+  }
+
+  static Future<User> setDescripcion(int id, String descripcion) async {
+    final url = Uri.parse('http://192.168.1.12:8080/api-user/$id/descripcion');
+print(url);
+    // Crear un usuario con solo la nueva descripción
+    final Map<String, dynamic> datosUsuario = {
+      'descripcion': descripcion,
+    };
+
+    try {
+      final respuesta = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(datosUsuario),
+      );
+
+      if (respuesta.statusCode < 300 || respuesta.statusCode >= 200) {
+        // Si la solicitud es exitosa, devuelve el usuario actualizado
+        final datosJson = jsonDecode(respuesta.body);
+        final nuevoUsuario = User.fromJson(datosJson);
+        return nuevoUsuario;
+      } else {
+        // Manejo de errores
+        throw Exception('Error al actualizar la descripción del usuario: ${respuesta.statusCode}');
+      }
+    } catch (e) {
+      // Manejo de excepciones
+      throw Exception('Error al conectar con el servidor: $e');
     }
   }
 
@@ -141,6 +175,19 @@ class UserService {
           await UserService.crearUser(usuario, email, contrasena, context);
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => Paso1Cuenta()));
+      print('User obtenido: ${user.nombre}');
+    } catch (error) {
+      print('Error: $error');
+    }
+  }
+
+  void actDescripcion( String descripcion,
+      BuildContext context) async {
+
+        print('descripcion: $descripcion id: ${UsuarioActual.instancia.usuario.getId}');
+    try {
+      final user = await UserService.setDescripcion(UsuarioActual.instancia.usuario.getId, descripcion);
+      Navigator.pushNamed(context, routes.paso2Cuenta);
       print('User obtenido: ${user.nombre}');
     } catch (error) {
       print('Error: $error');

@@ -1,10 +1,10 @@
-import 'dart:math';
+
 
 import 'package:campusmatch/Models/User.dart';
+import 'package:campusmatch/provider/UserService.dart';
 import 'package:campusmatch/widgets/FormInput.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:campusmatch/screens/Paso2Cuenta.dart';
 import 'package:campusmatch/utils/rutas.dart' as routes;
 
 class FormPaso1Cuenta extends StatefulWidget {
@@ -15,12 +15,13 @@ class FormPaso1Cuenta extends StatefulWidget {
 }
 
 class _FormPaso1CuentaState extends State<FormPaso1Cuenta> {
-  TextEditingController _despontroller = TextEditingController();
+  TextEditingController _despcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final Size = MediaQuery.of(context).size;
     String imageUrl = UsuarioActual.instancia.usuario.getImagen ?? '';
+    var userService = UserService();
 print('imagen');
 print(imageUrl);
     return Container(
@@ -40,7 +41,8 @@ print(imageUrl);
             onTap: () {
               print('tap');
               print(UsuarioActual.instancia.usuario.getImagen);
-              Navigator.pushNamed(context, routes.cargaImage);
+              Navigator.pushNamed(context, routes.cargaImage,
+                      arguments: {'numImagen': 'fotoperfil'});
             },
           ),
           SizedBox(height: 10),
@@ -56,7 +58,7 @@ print(imageUrl);
           ),
           SizedBox(height: 10),
           FormInput(
-              controller: _despontroller,
+              controller: _despcontroller,
               hintText: 'Descripción',
               keyboardType: TextInputType.text,
               obscureText: false,
@@ -94,10 +96,7 @@ print(imageUrl);
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Paso2Cuenta()));
+                      userService.actDescripcion(_despcontroller.text, context);
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -126,16 +125,18 @@ print(imageUrl);
 
 
 
+
 class ImageInputCircle extends StatelessWidget {
   final String? imageUrl;
   final double radius;
   final VoidCallback onTap;
+ 
 
   const ImageInputCircle({
     Key? key,
     this.imageUrl,
     required this.radius,
-    required this.onTap,
+    required this.onTap
   }) : super(key: key);
 
   @override

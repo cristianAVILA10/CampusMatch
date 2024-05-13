@@ -130,7 +130,7 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
             child: ElevatedButton(
               onPressed: () {
                 // Lógica Google
-                Navigator.pushNamed(context, routes.signGoogle);
+                Navigator.pushNamed(context, routes.paso2Cuenta);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -144,7 +144,7 @@ class _FormRegistrarmeState extends State<FormRegistrarme> {
                 children: [
                   Icon(
                     FontAwesomeIcons.google,
-                    color: Colors.black,
+                    color: const Color.fromARGB(255, 49, 48, 48),
                   ),
                   SizedBox(
                       width:

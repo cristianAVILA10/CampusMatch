@@ -1,6 +1,9 @@
+import 'package:campusmatch/Models/Interes.dart';
+import 'package:campusmatch/provider/InteresService.dart';
 import 'package:flutter/material.dart';
 import 'package:campusmatch/screens/Paso3Cuenta.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:campusmatch/utils/rutas.dart' as routes;
 
 class FormPaso3Cuenta extends StatelessWidget {
   const FormPaso3Cuenta({Key? key}) : super(key: key);
@@ -31,7 +34,6 @@ class FormPaso3Cuenta extends StatelessWidget {
             child: ListCardsScreen(),
           ),
           Container(
-            //color: Colors.green,
             height: Size.height * 0.2,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -62,10 +64,7 @@ class FormPaso3Cuenta extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Paso3Cuenta()));
+                      Navigator.pushNamed(context, routes.homePage);
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
@@ -93,87 +92,109 @@ class FormPaso3Cuenta extends StatelessWidget {
 }
 
 class ListCardsScreen extends StatefulWidget {
-  const ListCardsScreen({Key? key}) : super(key: key);
-
   @override
   _ListCardsScreenState createState() => _ListCardsScreenState();
 }
 
 class _ListCardsScreenState extends State<ListCardsScreen> {
-  @override
-  List<String> image = [
-    'socks',
-    'socks',
-    'socks',
-    'socks',
-    'socks',
-  ];
+  final InteresService interesService = InteresService();
+  List<Interes> intereses = [];
+  Set<int> interesesAgregados = {};
 
-  List<String> title = ['Futbol', 'Peliculas', 'Comida', 'Salidas', 'Carros'];
+  @override
+  void initState() {
+    super.initState();
+    obtenerIntereses();
+  }
+
+  Future<void> obtenerIntereses() async {
+    List<Interes> listaIntereses = await interesService.obtenerIntereses();
+    setState(() {
+      intereses = listaIntereses;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: image.length,
+        itemCount: intereses.length,
         itemBuilder: (BuildContext context, int index) {
-          return card(image[index], title[index], context);
+          return card(intereses[index], context);
         },
       ),
     );
   }
-}
 
-Widget card(String image, String title, BuildContext context) {
-  return Card(
-    color: const Color.fromARGB(255, 255, 255, 255),
-    borderOnForeground: true,
-    elevation: 2.0,
-    margin: const EdgeInsets.only(top: 15.0),
-    child: Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Icon(
-                  FontAwesomeIcons.image,
-                  size: 35,
+  Widget card(Interes interes, BuildContext context) {
+    bool agregado = interesesAgregados.contains(interes.id);
+    Color colorBoton = agregado ? Colors.green : Colors.yellow;
+
+    return Card(
+      color: const Color.fromARGB(255, 255, 255, 255),
+      borderOnForeground: true,
+      elevation: 2.0,
+      margin: const EdgeInsets.only(top: 15.0),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Icon(
+                    FontAwesomeIcons.image,
+                    size: 35,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  interes.nombre,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {},
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      if (!agregado) {
+                        interesesAgregados.add(interes.id);
+                      }
+                    });
+                    insertarInteres(interes.id);
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                       side: BorderSide(color: Colors.yellow, width: 3),
                     ),
-                    backgroundColor: Colors.yellow,
+                    backgroundColor: colorBoton,
                   ),
-                  child: const Icon(Icons.add)),
-            ],
-          ),
-        ],
+                  child: const Icon(Icons.add),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  void insertarInteres(int idInteres) async {
+    final interesService = InteresService();
+    await interesService.insertarInteres(idInteres);
+  }
 }

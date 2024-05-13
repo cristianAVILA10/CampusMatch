@@ -6,7 +6,7 @@ import 'package:campusmatch/screens/Paso1Cuenta.dart';
 
 class  ImagenService{
 
-  Future<String> uploadImage(File imageFile, int id) async {
+  Future<String> uploadImage(File imageFile, int id, String numimagen) async {
     var request = http.MultipartRequest(
       'POST',
       Uri.parse('http://192.168.1.12:8080/api-user/upload'),
@@ -16,6 +16,8 @@ class  ImagenService{
     var multipartFile = await http.MultipartFile.fromPath('archivo', imageFile.path);
     request.files.add(multipartFile);
     request.fields['id'] = id.toString();
+    request.fields['numimagen'] = numimagen.toString();
+    
     
     // Enviar la solicitud y esperar la respuesta
     var response = await request.send();

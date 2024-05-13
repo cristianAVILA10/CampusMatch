@@ -21,3 +21,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+enum Swipe { left, right, none }

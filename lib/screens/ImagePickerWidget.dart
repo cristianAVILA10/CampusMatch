@@ -10,8 +10,11 @@ import 'package:campusmatch/utils/rutas.dart' as routes;
 
 
 class ImagePickerWidget extends StatefulWidget {
+ final String numImagen; // Parámetro adicional
+ const ImagePickerWidget({Key? key, required this.numImagen}) : super(key: key);
   @override
   _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
+
 }
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
@@ -25,11 +28,14 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
       setState(() {
         print('entra state');
         print(UsuarioActual.instancia.usuario.getId);
+        print(widget.numImagen);
         _imageFile = File(pickedFile.path);
         var imagenService = ImagenService();
-        imagenService.uploadImage(_imageFile!,UsuarioActual.instancia.usuario.getId);
+
+        print('entra state 2: ');
+        imagenService.uploadImage(_imageFile!,UsuarioActual.instancia.usuario.getId, widget.numImagen);
         
-        Navigator.pushNamed(context, routes.paso1Cuenta);
+        Navigator.pushNamed(context, routes.paso2Cuenta);
       });
     }
   }

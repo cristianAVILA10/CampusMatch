@@ -6,6 +6,8 @@ class User {
   final String? usuario;
   final String? imagen;
   final String? descripcion;
+  final String imageAsset;
+  final String distance;
 
   User({
     required this.id,
@@ -15,6 +17,8 @@ class User {
     required this.usuario,
     required this.imagen,
     required this.descripcion,
+    required this.imageAsset,
+    required this.distance,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,8 @@ class User {
       usuario: json['usuario'],
       imagen: json['imagen'],
       descripcion: json['descripcion'],
+      imageAsset: json['imageAsset'],
+      distance: json['distance'],
     );
   }
 
@@ -37,7 +43,8 @@ class User {
   String? get getUsuario => usuario;
   String? get getImagen => imagen;
   String? get getDescripcion => descripcion;
-
+   String? get getImageAsset => imageAsset;
+   String? get getDistance => distance;
   // Setters
 }
 
@@ -57,6 +64,8 @@ class UsuarioActual {
       usuario: '',
       imagen: '',
       descripcion: '',
+      imageAsset: '',
+      distance: '',
     ));
     return _instancia!;
   }
