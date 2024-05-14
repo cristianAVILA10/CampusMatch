@@ -33,18 +33,15 @@ class InteresService {
    Future<void> insertarInteres(int idInteres) async {
     try {
       // Define la URL de tu API donde realizarás la inserción del interés
-      String url = 'http://192.168.1.12:8080/api/intereses/agregar';
+      String url = 'http://${hostGlobal}:8080/api/intereses/agregar';
 
-      // Crea un mapa con los datos del interés a insertar
       Map<String, dynamic> data = {
         'idInteres': idInteres,
         "idUsuario": UsuarioActual.instancia.usuario.getId
       };
 
-      // Convierte el mapa de datos a JSON
       String body = json.encode(data);
 
-      // Realiza la solicitud POST a la API para insertar el interés
       http.Response response = await http.post(
         Uri.parse(url),
         headers: <String, String>{
@@ -53,21 +50,16 @@ class InteresService {
         body: body,
       );
 
-      // Verifica si la solicitud fue exitosa (código de estado 200)
+
       if (response.statusCode == 200) {
-        // Si la inserción fue exitosa, no necesitas hacer nada más aquí
-        // Puedes agregar algún código adicional si lo necesitas
+        print('perfecto');
       } else {
-        // Si la solicitud no fue exitosa, puedes manejar el error de alguna manera
-        // Por ejemplo, puedes imprimir el cuerpo de la respuesta para depurar
         print('Error al insertar el interés: ${response.body}');
-        // Puedes lanzar una excepción si lo prefieres
         throw Exception('Error al insertar el interés');
       }
     } catch (e) {
-      // Maneja cualquier excepción que pueda ocurrir durante la solicitud
       print('Excepción al insertar el interés: $e');
-      // Lanza la excepción para que quien llame a este método pueda manejarla
+
  
     }
   }

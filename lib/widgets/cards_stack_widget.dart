@@ -41,7 +41,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   }
 
   Future<void> loadUsers() async {
-    final String apiUrl = 'http://192.168.1.12:8080/api-user/users';
+    final String apiUrl = 'http://${hostGlobal}:8080/api-user/users';
     try {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
